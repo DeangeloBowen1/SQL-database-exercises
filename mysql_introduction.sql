@@ -1,3 +1,4 @@
+-- This is the first database exercise 
 SELECT * FROM mysql.user;
 SELECT user, host FROM mysql.user;
 SELECT * FROM mysql.help_topic;
