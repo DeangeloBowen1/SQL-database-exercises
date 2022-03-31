@@ -57,6 +57,8 @@ select release_date, name from albums where release_date > 1989 and release_date
 -- albums with less than 20m in sales
 
 select name, sales < 20.0 from albums;
+-- OR
+select name, sales from albums where sales < 20.0;
 
 -- ans: grease, bad, sgt peppers, dirty dancing, lets talk about love, dangerous, immaculate collection
 -- ...abby road, born in the usa, brothers in arms, titanic, nevermind, the wall
