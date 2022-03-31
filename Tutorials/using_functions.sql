@@ -5,7 +5,7 @@
 -- use fruits_db;
 -- SELECT * FROM fruits;
 -- SELECT name, quantity FROM fruits;
--- Select Distinct * (dropping duplicates)
+-- Select Distinct * --(dropping duplicates)
 
 use albums_db;
 show tables;
@@ -14,13 +14,20 @@ describe albums;
 -- ans: 6
 
 select * from albums;
-select distinct artist from albums;
+select count(distinct artist) from albums;
+ 	
 -- how many unique artist names are in albums?
 -- ans 23
 
 -- what is the primary key for the albums table?
 -- ans id
 
+select min(release_date) as earliest_album
+ from albums;
+ 
+select max(release_date) as newest_album
+ from albums;
+ 
 -- What is the oldest release date for any album in the albums table? 
 --  ans 1967
 
@@ -39,6 +46,10 @@ select distinct artist from albums;
 -- albums released in the 1990s
 
 select name, release_date between 1990 and 1999 from albums;
+-- OR
+select release_date, name from albums where release_date between 1990 and 1999;
+-- OR
+select release_date, name from albums where release_date > 1989 and release_date < 2000;
 
 -- ans:  the bodyguard, jagged little pill, come on over, falling into you, lets talk about love
 -- dangerous, the immaculate collection, titanic, metallica, nevermind, supernatural
@@ -54,5 +65,7 @@ select name, sales < 20.0 from albums;
 -- Why do these query results not include albums with a genre of "Hard rock" or "Progressive rock"?
 
 select name, genre = "Rock", genre, release_date, artist from albums;
+-- OR
+select name, genre from albums where genre = "Rock";
 
 -- ans: perhaps because the beatles, santana and bruce springsteen didnt make hard rock.
