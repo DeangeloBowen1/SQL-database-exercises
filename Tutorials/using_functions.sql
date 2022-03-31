@@ -34,12 +34,15 @@ select max(release_date) as newest_album
 -- What is the most recent release date?
 -- ans 2011	
 
+select name as "pink floyd" from albums where artist = "pink floyd";
+
 -- all the albums of pink floyd:
 -- ans dark side of the moon and the wall
 
 -- sgt. peppers lonely hearts club band release date:
 -- ans 1967
 
+select genre from albums where name = "nevermind";
 -- genre for album nevermind
 -- ans grunge, alternative rock
 
@@ -47,9 +50,14 @@ select max(release_date) as newest_album
 
 select name, release_date between 1990 and 1999 from albums;
 -- OR
-select release_date, name from albums where release_date between 1990 and 1999;
+select release_date,
+ name from albums 
+ where release_date between 1990 and 1999;
 -- OR
-select release_date, name from albums where release_date > 1989 and release_date < 2000;
+select release_date, name 
+from albums 
+where release_date > 1989 
+and release_date < 2000;
 
 -- ans:  the bodyguard, jagged little pill, come on over, falling into you, lets talk about love
 -- dangerous, the immaculate collection, titanic, metallica, nevermind, supernatural
@@ -64,10 +72,22 @@ select name, sales from albums where sales < 20.0;
 -- ...abby road, born in the usa, brothers in arms, titanic, nevermind, the wall
 
 -- All the albums with a genre of "Rock". 
+
 -- Why do these query results not include albums with a genre of "Hard rock" or "Progressive rock"?
 
 select name, genre = "Rock", genre, release_date, artist from albums;
 -- OR
 select name, genre from albums where genre = "Rock";
+-- OR
 
--- ans: perhaps because the beatles, santana and bruce springsteen didnt make hard rock.
+
+SELECT
+    name, genre
+FROM
+    albums
+WHERE
+	find_in_set("Rock",genre)
+   --  genre = "Rock"
+-- 	or genre LIKE "Rock,%"
+-- 	or genre LIKE "%, Rock, %"
+-- 	or genre LIKE "%, Rock’;"
