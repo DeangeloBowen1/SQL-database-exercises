@@ -20,9 +20,7 @@ describe employees;
 
 Select first_name, last_name
 from employees
-where first_name="Irena"
-OR first_name= "Vidya"
-OR first_name= "Maya"
+where first_name IN ("Irena","Vidya","Maya")
 ORDER BY first_name ASC;
 
 -- ***********Question 3************
@@ -34,7 +32,7 @@ ORDER BY first_name ASC;
 -- What was the first and last name of the last person in the table?
 	-- Zweizig
 
-Select first_name, last_name
+Select *
 from employees
 where first_name="Irena"
 OR first_name= "Vidya"
@@ -56,6 +54,9 @@ OR first_name= "Vidya"
 OR first_name= "Maya"
 ORDER BY last_name, first_name ASC;
 
+
+-- ********Question 5*******
+
 Select * #count(emp_no)	
 from employees
 where last_name like "E%E"
@@ -69,6 +70,7 @@ ORDER BY emp_no DESC;
 
 -- 899 employees returned Oldest: Sergi, Erde. Newest: Teiji Eldridge
 
+-- Question 6 --
 Select *#count(emp_no)	
 from employees
 where last_name like "E%E"
@@ -78,9 +80,9 @@ ORDER BY hire_date DESC;
 --  Sort the results so that the oldest employee who was hired last is the first result.
 --  Enter a comment with the number of employees returned
 --  the name of the oldest employee who was hired last
-	-- 
 --  and the name of the youngest employee who was hired first.
-
+--
+-- *****Question 7******
 SELECT * 
 from employees
 where hire_date LIKE "199%"
@@ -88,6 +90,10 @@ and (
 birth_date LIKE '%-12-25'
 )
 ORDER BY birth_date, hire_date;
+
+-- ******Limit Exercises****
+
+
 
 
 
