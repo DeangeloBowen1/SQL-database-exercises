@@ -48,12 +48,52 @@ representing the number of cents of the payment. For example, 1.99 should become
 
 /* #3 Find out how the current average pay in each department compares to the overall
 ,historical average pay. */
-CREATE TEMPORARY TABLE jemison_1760.cur_avg_sal
-SELECT dept_name, AVG(salary) as cur_avg_sal 
-FROM dept_emp as de
-JOIN salaries as s ON de.emp_no = s.emp_no AND s.to_date > NOW()
-JOIN departments as d ON d.dept_no = de.dept_no AND de.to_date > NOW()
-GROUP BY dept_name;
+CREATE TEMPORARY TABLE jemison_1760.join_ex
+SELECT d.dept_name, AVG(s.salary) as HIST
+FROM employees as e
+JOIN dept_emp AS de USING(emp_no)
+JOIN salaries AS s USING (emp_no)
+JOIN departments AS d USING (dept_no)
+WHERE s.to_date < CURDATE()
+GROUP BY d.dept_name;
+
+SELECT * 
+FROM jemison_1760.join_ex;
+
+
+
+CREATE TEMPORARY TABLE jemison_1760.DeptSal
+SELECT d.dept_name, AVG(s.salary) as CurAvgSal
+FROM employees as e
+JOIN dept_emp AS de USING(emp_no)
+JOIN salaries AS s USING (emp_no)
+JOIN departments AS d USING (dept_no)
+WHERE s.to_date > CURDATE()
+GROUP BY d.dept_name;
+
+USE jemison_1760;
+SELECT * FROM DeptSal;
+
+SELECT 	(SELECT AVG(salary) FROM employees.salaries WHERE salaries.to_date < NOW()) as historic_data,
+		(CurAvgSal - (SELECT AVG(salary) FROM employees.salaries))
+		/
+        (SELECT stddev(salary) FROM employees.salaries) AS zscore,
+        CurAvgSal,
+        DeptSal.dept_name
+FROM DeptSal
+GROUP BY CurAvgSal, DeptSal.dept_name
+ORDER BY zscore DESC;
+
+CREATE TEMPORARY TABLE jemison_1760.united AS
+SELECT HIST, CurAvgSal, dept_name
+FROM jemison_1760.DeptSal as jd
+JOIN jemison_1760.join_ex AS je USING(dept_name);
+
+SELECT *
+FROM jemison_1760.united;
+
+
+
 
 -- SELECT AVG(salary)
 -- FROM dept_emp as de
@@ -61,17 +101,17 @@ GROUP BY dept_name;
 -- JOIN departments as d ON d.dept_no = de.dept_no
 -- GROUP BY dept_name;
 
-ALTER TABLE jemison_1760.cur_avg_sal ADD historic_data INT(15);
+-- ALTER TABLE jemison_1760.cur_avg_sal ADD historic_data INT(15);
 
-UPDATE jemison_1760.cur_avg_sal
-SET historic_data = 
-(SELECT AVG(salary)
-	FROM dept_emp as de
-JOIN salaries as s ON de.emp_no = s.emp_no
-JOIN departments as d ON d.dept_no = de.dept_no);
+-- UPDATE jemison_1760.cur_avg_sal
+-- SET historic_data = 
+-- (SELECT AVG(salary)
+-- 	FROM dept_emp as de
+-- JOIN salaries as s ON de.emp_no = s.emp_no
+-- JOIN departments as d ON d.dept_no = de.dept_no);
 
-SELECT *
-FROM jemison_1760.cur_avg_sal;
+-- SELECT *
+-- FROM jemison_1760.cur_avg_sal;
 
 
 
@@ -91,7 +131,7 @@ hat is the best department right now to work for? The worst?*/
 
 
 
-/*
+
 USE sakila;
 
 CREATE TEMPORARY TABLE jemison_1760.sakila_amount AS
@@ -113,6 +153,6 @@ ALTER TABLE jemison_1760.sakila_amount DROP COLUMN amount;
  
 SELECT *
 FROM jemison_1760.sakila_amount;
-*/
+
 
 
